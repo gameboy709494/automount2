@@ -1,0 +1,24 @@
+# 99-automount.rules
+#
+# Licensed under the GNU General Public License v2.0
+# CopyRight (c) 2016 Weiqi Chen.
+# 
+# This file is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+#
+
+# Actually, SUBSYSTEMS=="usb" usually means "removable", 
+# but It don't hurt anyone using ATTRS{removable}=="removable".
+
+#ENV{ID_FS_TYPE}=="", GOTO="end"
+#KERNEL=="sd*", SUBSYSTEMS=="usb", ATTRS{removable}=="removable", ACTION=="add"   , RUN+="/opt/automount.sh add"
+#KERNEL=="sd*",                                                   ACTION=="remove", RUN+="/opt/automount.sh remove"
+#KERNEL=="sd*", SUBSYSTEMS=="usb", ATTRS{removable}=="removable", ACTION=="remove"   , RUN+="/opt/automount.sh add"
+#KERNEL=="sd*", SUBSYSTEMS=="usb", ATTRS{removable}=="removable", ACTION=="add", ENV{ID_FS_TYPE}!="", RUN+="/opt/automount.sh add"
+
+KERNEL=="sd*", SUBSYSTEMS=="usb", ATTRS{removable}=="removable", ACTION=="add"   , RUN+="/opt/automount2.sh $env{ID_FS_TYPE} $env{ID_FS_USAGE} $env{ID_FS_UUID_ENC} $env{ID_FS_LABEL_ENC}"
+KERNEL=="sd*",                                                   ACTION=="remove", RUN+="/opt/automount2.sh"
+
+
